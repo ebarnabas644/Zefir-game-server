@@ -41,8 +41,12 @@ io.on('connection', (socket: Socket) => {
 });
 
 setInterval(() => {
-  io.sockets.emit('state', players)
-}, 1000 / 60)
+  if(connectedSockets[0]){
+    const healthComponent = gameState.entities['players'][connectedSockets[0]].getComponent('health') as HealthComponent
+    healthComponent.health -= 1
+  }
+  io.sockets.emit('state', gameState.convertToEntityDTOArray())
+}, 1000 / 30)
 
 
 server.listen(3000, () => {
