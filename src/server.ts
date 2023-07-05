@@ -35,7 +35,7 @@ io.on('connection', (socket: Socket) => {
   socket.on('newPlayer', (name: string) => {
     const player = new Entity(name)
     player.addComponent('health', new HealthComponent(100))
-    player.addComponent('position', new PositionComponent(50, 50))
+    player.addComponent('position', new PositionComponent(Math.floor(Math.random() * (200 - 50 + 1)) + 50, Math.floor(Math.random() * (200 - 50 + 1)) + 50))
     player.addComponent('sprite', new SpriteComponent('player.png'))
     gameState.entities['players'][socket.id] = player
     connectedSockets.push(socket.id)
