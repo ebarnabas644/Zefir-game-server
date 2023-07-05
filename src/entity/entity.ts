@@ -1,15 +1,19 @@
 import { Component } from './Components/component'
 import type { IScript } from './Interfaces/IScript';
 
+let idCounter = 0
 // Entity class
 export class Entity {
   components: { [key: string]: any };
   name: string
-
+  id: number
+  tags: string[]
 
   constructor(name: string) {
     this.components = {};
     this.name = name
+    this.id = idCounter++
+    this.tags = []
   }
 
   addComponent(componentName: string, component: Component) {
