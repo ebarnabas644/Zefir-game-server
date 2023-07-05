@@ -39,6 +39,26 @@ io.on('connection', (socket: Socket) => {
     player.addComponent('sprite', new SpriteComponent('player.png'))
     gameState.entities['players'][socket.id] = player
     connectedSockets.push(socket.id)
+
+    socket.on('playerCommand', (commands: any) => {
+      const posComp = gameState.entities['players'][socket.id].getComponent('position') as PositionComponent
+      console.log(commands)
+      
+      for (const command of commands) {
+        if(command == "leftMoveCommand"){
+          posComp.position.x -= 10
+        }
+        else if(command == "rightMoveCommand"){
+          posComp.position.x += 10
+        }
+        else if(command == "upMoveCommand"){
+          posComp.position.y -= 10
+        }
+        else if(command == "downMoveCommand"){
+          posComp.position.y += 10
+        }
+      }
+    })
   })
 
   socket.on('disconnect', () => {
