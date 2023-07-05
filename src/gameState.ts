@@ -5,6 +5,7 @@ import { Entity } from './entity/entity'
 
 type EntityDictionary = { [key: string]: { [key: string]: Entity }}
 type EntityDTO = {
+    id: number,
     health: number,
     position: { x: number, y: number },
     sprite: string
@@ -38,6 +39,7 @@ export class GameState{
         const positionComponent = entity.getComponent('position') as PositionComponent
         const spriteComponent = entity.getComponent('sprite') as SpriteComponent
         const entityDTO: EntityDTO = {
+            id: entity.id,
             health: healthComponent.health,
             position: { x: positionComponent.position.x, y: positionComponent.position.y },
             sprite: spriteComponent.spritePath
