@@ -2,14 +2,21 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors'
-import { players } from './gameState';
+import { GameState } from './gameState';
+import { Entity } from './entity/entity';
+import { HealthComponent } from './entity/Components/healthComponent'
+import { PositionComponent } from './entity/Components/positionComponent'
+import { SpriteComponent } from './entity/Components/spriteComponent'
 
 const app: any = express();
 const server = createServer(app);
+const gameState = new GameState()
+const connectedSockets: string[] = []
 const io = new Server(server, {
     cors: {
         origin: 'http://localhost:5173'
-    }
+    },
+    allowEIO3: true
 });
 
 app.use(cors({
@@ -25,18 +32,22 @@ io.on('connection', (socket: Socket) => {
     socket.broadcast.emit('response', socket.id + ": "+ message)
   })
 
-  socket.on('newPlayer', () => {
-    players[socket.id] = {
-      x: Math.floor(Math.random() * 201) + 200,
-      y: Math.floor(Math.random() * 201) + 200,
-      width: 25,
-      height: 25
-    }
+  socket.on('newPlayer', (name: string) => {
+    const player = new Entity(name)
+    player.addComponent('health', new HealthComponent(100))
+    player.addComponent('position', new PositionComponent(50, 50))
+    player.addComponent('sprite', new SpriteComponent('player.png'))
+    gameState.entities['players'][socket.id] = player
+    connectedSockets.push(socket.id)
   })
 
   socket.on('disconnect', () => {
-    delete players[socket.id]
+    delete gameState.entities['players'][socket.id]
     console.log("Player disconnected: "+socket.id)
+    const index = connectedSockets.indexOf(socket.id)
+    if(index !== -1){
+      connectedSockets.splice(index, 1)
+    }
   })
 });
 
