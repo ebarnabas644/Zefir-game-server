@@ -7,10 +7,13 @@ import { Entity } from './entity/entity';
 import { HealthComponent } from './entity/Components/healthComponent'
 import { PositionComponent } from './entity/Components/positionComponent'
 import { SpriteComponent } from './entity/Components/spriteComponent'
+import { PlayerCommandManager } from './playerCommandManager';
+
+export const gameState = new GameState()
+const playerCommandManager = new PlayerCommandManager()
 
 const app: any = express();
 const server = createServer(app);
-const gameState = new GameState()
 const connectedSockets: string[] = []
 const io = new Server(server, {
     cors: {
@@ -41,27 +44,12 @@ io.on('connection', (socket: Socket) => {
     connectedSockets.push(socket.id)
 
     socket.on('playerCommand', (commands: any) => {
-      const posComp = gameState.entities['players'][socket.id].getComponent('position') as PositionComponent
-      console.log(commands)
-      
-      for (const command of commands) {
-        if(command == "leftMoveCommand"){
-          posComp.position.x -= 10
-        }
-        else if(command == "rightMoveCommand"){
-          posComp.position.x += 10
-        }
-        else if(command == "upMoveCommand"){
-          posComp.position.y -= 10
-        }
-        else if(command == "downMoveCommand"){
-          posComp.position.y += 10
-        }
-      }
+      playerCommandManager.setCommands(commands, socket.id)
     })
   })
 
   socket.on('disconnect', () => {
+    playerCommandManager.deleteCommands(socket.id)
     delete gameState.entities['players'][socket.id]
     console.log("Player disconnected: "+socket.id)
     const index = connectedSockets.indexOf(socket.id)
@@ -72,6 +60,7 @@ io.on('connection', (socket: Socket) => {
 });
 
 setInterval(() => {
+  playerCommandManager.ExecuteCommands()
   if(connectedSockets[0]){
     const healthComponent = gameState.entities['players'][connectedSockets[0]].getComponent('health') as HealthComponent
     healthComponent.health -= 1
