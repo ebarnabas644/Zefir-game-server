@@ -77,7 +77,7 @@ setInterval(() => {
     healthComponent.health -= 1
   }
   io.sockets.emit('state', gameState.convertToEntityDTOArray())
-}, 1000 / 30)
+}, 1000 / 60)
 
 
 server.listen(3000, () => {
