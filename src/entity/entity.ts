@@ -7,13 +7,13 @@ export class Entity {
   components: { [key: string]: any };
   name: string
   id: number
-  tags: string[]
+  tags: {[key: string]: any}
 
   constructor(name: string) {
     this.components = {};
     this.name = name
     this.id = idCounter++
-    this.tags = []
+    this.tags = {}
   }
 
   addComponent(componentName: string, component: Component) {
@@ -37,6 +37,14 @@ export class Entity {
         component.update()
       }
     }
+  }
+
+  addTag(key: string, value: any){
+    this.tags[key] = value
+  }
+
+  removeTag(key: string){
+    delete this.tags[key]
   }
 
   private isScriptComponent(component: any): component is IScript{
