@@ -17,13 +17,13 @@ const server = createServer(app);
 const connectedSockets: string[] = []
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:5173'
+        origin: 'http://25.74.110.92:5173'
     },
     allowEIO3: true
 });
 
 app.use(cors({
-    origin: 'http://localhost:5173/'
+    origin: 'http://25.74.110.92:5173/'
 }))
 
 io.on('connection', (socket: Socket) => {
@@ -41,8 +41,9 @@ io.on('connection', (socket: Socket) => {
     player.addComponent('position', new PositionComponent(Math.floor(Math.random() * (200 - 50 + 1)) + 50, Math.floor(Math.random() * (200 - 50 + 1)) + 50))
     player.addComponent('sprite', new SpriteComponent('player.png'))
     gameState.entities['players'][socket.id] = player
+    gameState.entities['players'][socket.id].addTag('controlledby', socket.id)
     connectedSockets.push(socket.id)
-
+    socket.emit('playerCreated', gameState.convertEntityToDTO(gameState.entities['players'][socket.id]))
     socket.on('playerCommand', (commands: any) => {
       playerCommandManager.setCommands(commands, socket.id)
     })
