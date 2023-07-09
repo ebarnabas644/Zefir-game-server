@@ -4,11 +4,12 @@ import { SpriteComponent } from './entity/Components/spriteComponent'
 import { Entity } from './entity/entity'
 
 type EntityDictionary = { [key: string]: { [key: string]: Entity }}
-type EntityDTO = {
+export type EntityDTO = {
     id: number,
     health: number,
     position: { x: number, y: number },
-    sprite: string
+    sprite: string,
+    tags: {[key: string]: any}
 }
 
 type EntityDTODictionary = { [key: string]: EntityDTO[]}
@@ -34,7 +35,7 @@ export class GameState{
         return entityDTODictionary
     }
 
-    private convertEntityToDTO(entity: Entity): EntityDTO{
+    convertEntityToDTO(entity: Entity): EntityDTO{
         const healthComponent = entity.getComponent('health') as HealthComponent
         const positionComponent = entity.getComponent('position') as PositionComponent
         const spriteComponent = entity.getComponent('sprite') as SpriteComponent
@@ -42,7 +43,12 @@ export class GameState{
             id: entity.id,
             health: healthComponent.health,
             position: { x: positionComponent.position.x, y: positionComponent.position.y },
-            sprite: spriteComponent.spritePath
+            sprite: spriteComponent.spritePath,
+            tags: {}
+        }
+
+        for (const key in entity.tags) {
+            entityDTO.tags[key] = entity.tags[key]
         }
 
         return entityDTO
