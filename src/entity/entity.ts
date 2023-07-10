@@ -47,6 +47,10 @@ export class Entity {
     delete this.tags[key]
   }
 
+  findTag(key: string){
+    return this.tags[key]
+  }
+
   private isScriptComponent(component: any): component is IScript{
     return 'update' in component
   }
