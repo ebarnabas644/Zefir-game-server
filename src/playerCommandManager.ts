@@ -1,15 +1,21 @@
 import { gameState } from "./server"
 import { PositionComponent } from "./entity/Components/positionComponent"
+import { findPlayer, findPlayers } from "./utils/taghelpers"
+import { EntityDictionary, GameState } from "./gameState"
 
 export class PlayerCommandManager{
     private activeCommands: {[key: string]: Set<string>}
-
-    constructor(){
+    private state: GameState
+    constructor(gameState: GameState){
         this.activeCommands = {}
+        this.state = gameState
     }
 
     public setCommands(commands: Set<string>, socketId: string){
-        this.activeCommands[socketId] = new Set(commands)
+      const player = findPlayer(socketId, this.state.entities)
+      if(player){
+        player.commandBuffer = new Set(commands)
+      }
     }
 
     public deleteCommands(socketId: string){
@@ -17,24 +23,24 @@ export class PlayerCommandManager{
     }
 
     public ExecuteCommands(){
-        for (const key in this.activeCommands) {
-          let target = gameState.entities['players'][key]
-          const posComp = target.getComponent('position') as PositionComponent
-          for (const command of this.activeCommands[key]) {
-            if(command == "leftMoveCommand"){
-              posComp.position.x -= 5
+        const players = findPlayers(this.state.entities)
+        for (let index = 0; index < players.length; index++) {
+          const player = players[index];
+          const posComp = player.getComponent('position') as PositionComponent
+            for (const command of player.commandBuffer) {
+              if(command == "leftMoveCommand"){
+                posComp.position.x -= 5
+              }
+              else if(command == "rightMoveCommand"){
+                posComp.position.x += 5
+              }
+              else if(command == "upMoveCommand"){
+                posComp.position.y -= 5
+              }
+              else if(command == "downMoveCommand"){
+                posComp.position.y += 5
+              }
             }
-            else if(command == "rightMoveCommand"){
-              posComp.position.x += 5
-            }
-            else if(command == "upMoveCommand"){
-              posComp.position.y -= 5
-            }
-            else if(command == "downMoveCommand"){
-              posComp.position.y += 5
-            }
-          }
         }
-        
     }
 }

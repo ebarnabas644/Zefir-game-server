@@ -3,33 +3,30 @@ import { PositionComponent } from './entity/Components/positionComponent'
 import { SpriteComponent } from './entity/Components/spriteComponent'
 import { Entity } from './entity/entity'
 
-type EntityDictionary = { [key: string]: { [key: string]: Entity }}
+export type EntityDictionary = Entity[]
 export type EntityDTO = {
     id: number,
+    name: string,
     health: number,
     position: { x: number, y: number },
     sprite: string,
     tags: {[key: string]: any}
 }
 
-type EntityDTODictionary = { [key: string]: EntityDTO[]}
+type EntityDTODictionary = EntityDTO[]
 
 export class GameState{
     public entities: EntityDictionary
 
     constructor(){
-        this.entities = {}
-        this.entities['players'] = {}
+        this.entities = []
     }
 
     public convertToEntityDTOArray(): EntityDTODictionary{
-        const entityDTODictionary: EntityDTODictionary = {}
-        for (const key in this.entities) {
-            entityDTODictionary[key] = []
-            for (const entityKey in this.entities[key]) {
-                const entityDTO = this.convertEntityToDTO(this.entities[key][entityKey])
-                entityDTODictionary[key].push(entityDTO)
-            }
+        const entityDTODictionary: EntityDTODictionary = []
+        for (let index = 0; index < this.entities.length; index++) {
+            const entityDTO = this.convertEntityToDTO(this.entities[index])
+            entityDTODictionary.push(entityDTO)
         }
 
         return entityDTODictionary
@@ -41,6 +38,7 @@ export class GameState{
         const spriteComponent = entity.getComponent('sprite') as SpriteComponent
         const entityDTO: EntityDTO = {
             id: entity.id,
+            name: entity.name,
             health: healthComponent.health,
             position: { x: positionComponent.position.x, y: positionComponent.position.y },
             sprite: spriteComponent.spritePath,
@@ -52,5 +50,9 @@ export class GameState{
         }
 
         return entityDTO
+    }
+
+    removeEntity(entity: Entity){
+        this.entities = this.entities.filter(element => element.id !== entity.id)
     }
 }
