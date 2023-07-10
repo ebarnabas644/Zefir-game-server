@@ -8,12 +8,14 @@ export class Entity {
   name: string
   id: number
   tags: {[key: string]: any}
+  commandBuffer: Set<String>
 
   constructor(name: string) {
     this.components = {};
     this.name = name
     this.id = idCounter++
     this.tags = {}
+    this.commandBuffer = new Set()
   }
 
   addComponent(componentName: string, component: Component) {
