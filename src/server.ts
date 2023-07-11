@@ -65,8 +65,10 @@ io.on('connection', (socket: Socket) => {
 });
 
 setInterval(() => {
+  console.time('tick')
   playerCommandManager.ExecuteCommands()
   io.sockets.emit('state', gameState.convertToEntityDTOArray())
+  console.timeEnd('tick')
 }, 1000 / 60)
 
 
