@@ -29,16 +29,16 @@ export class PlayerCommandManager{
           const posComp = player.getComponent('position') as PositionComponent
             for (const command of player.commandBuffer) {
               if(command == "leftMoveCommand"){
-                posComp.position.x -= 5
+                posComp.position.x -= 7
               }
               else if(command == "rightMoveCommand"){
-                posComp.position.x += 5
+                posComp.position.x += 7
               }
               else if(command == "upMoveCommand"){
-                posComp.position.y -= 5
+                posComp.position.y -= 7
               }
               else if(command == "downMoveCommand"){
-                posComp.position.y += 5
+                posComp.position.y += 7
               }
             }
         }
