@@ -33,7 +33,7 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('message', (message: string) => {
     console.log('Message received: ' + message)
-    socket.broadcast.emit('response', socket.id + ": "+ message)
+    socket.broadcast.emit('response', findPlayer(socket.id, gameState.entities)?.name + ": "+ message)
   })
 
   socket.on('newPlayer', (name: string) => {
