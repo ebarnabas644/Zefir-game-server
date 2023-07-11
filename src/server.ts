@@ -38,13 +38,14 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('newPlayer', (name: string) => {
     const player = new Entity(name)
+    console.log('Player '+name+' created')
     player.addComponent('health', new HealthComponent(100))
     player.addComponent('position', new PositionComponent(Math.floor(Math.random() * (200 - 50 + 1)) + 50, Math.floor(Math.random() * (200 - 50 + 1)) + 50))
     player.addComponent('sprite', new SpriteComponent('player.png'))
     player.addTag('controlledby', socket.id)
     gameState.entities.push(player)
     connectedSockets.push(socket.id)
-    socket.emit('playerCreated', gameState.convertEntityToDTO(player))
+    socket.emit('playerCreated', '')
     socket.on('playerCommand', (commands: any) => {
       playerCommandManager.setCommands(commands, socket.id)
     })
