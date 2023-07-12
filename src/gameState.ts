@@ -10,6 +10,7 @@ export type EntityDTO = {
     health: number,
     position: { x: number, y: number },
     sprite: string,
+    state: string,
     tags: {[key: string]: any}
 }
 
@@ -42,6 +43,7 @@ export class GameState{
             health: healthComponent.health,
             position: { x: positionComponent.position.x, y: positionComponent.position.y },
             sprite: spriteComponent.spritePath,
+            state: spriteComponent.state,
             tags: {}
         }
 
