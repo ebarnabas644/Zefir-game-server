@@ -27,18 +27,25 @@ export class PlayerCommandManager{
         for (let index = 0; index < players.length; index++) {
           const player = players[index];
           const posComp = player.getComponent('position') as PositionComponent
+          if(player.commandBuffer.size == 0){
+            posComp.speed = 0
+          }
             for (const command of player.commandBuffer) {
               if(command == "leftMoveCommand"){
                 posComp.position.x -= 7
+                posComp.speed = 7
               }
               else if(command == "rightMoveCommand"){
                 posComp.position.x += 7
+                posComp.speed = 7
               }
               else if(command == "upMoveCommand"){
                 posComp.position.y -= 7
+                posComp.speed = 7
               }
               else if(command == "downMoveCommand"){
                 posComp.position.y += 7
+                posComp.speed = 7
               }
             }
         }
