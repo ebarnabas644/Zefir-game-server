@@ -1,7 +1,30 @@
+import { IScript } from '../Interfaces/IScript'
 import { Component } from './component'
 
-export class SpriteComponent extends Component {
-  constructor(public spritePath: string){
+export type State<T> = {
+  name: string,
+  requirement: (...params: any[]) => boolean,
+  params: T[]
+}
+
+export class SpriteComponent extends Component implements IScript {
+  private states: State<any>[]
+  constructor(public spritePath: string, public animated: boolean = false, public state: string = "default"){
     super()
+    this.states = []
+  }
+
+  public addState(state: State<any>){
+    this.states.push(state)
+  }
+
+  public update(){
+    for (const state of this.states) {
+      const isRequirementMet = state.requirement(...state.params)
+      if(isRequirementMet){
+        this.state = state.name
+        break
+      }
+    }
   }
 }
