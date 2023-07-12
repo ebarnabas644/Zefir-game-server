@@ -41,7 +41,33 @@ io.on('connection', (socket: Socket) => {
     console.log('Player '+name+' created')
     player.addComponent('health', new HealthComponent(100))
     player.addComponent('position', new PositionComponent(Math.floor(Math.random() * (200 - 50 + 1)) + 50, Math.floor(Math.random() * (200 - 50 + 1)) + 50))
-    player.addComponent('sprite', new SpriteComponent('player.png'))
+    player.addComponent('sprite', new SpriteComponent('player.png', true, 'idle'))
+    const spriteComponent = player.getComponent('sprite') as SpriteComponent
+    if(spriteComponent){
+      const positionComponent = player.getComponent('position') as PositionComponent
+      if(positionComponent){
+        spriteComponent.addState({
+          name: 'idle',
+          requirement: (positionComponent: PositionComponent) => {
+            if(positionComponent.speed == 0){
+              return true
+            }
+            return false
+          },
+          params: [positionComponent]
+        })
+        spriteComponent.addState({
+          name: 'run',
+          requirement: (positionComponent: PositionComponent) => {
+            if(positionComponent.speed > 0){
+              return true
+            }
+            return false
+          },
+          params: [positionComponent]
+        })
+      }
+    }
     player.addTag('controlledby', socket.id)
     gameState.entities.push(player)
     connectedSockets.push(socket.id)
@@ -67,6 +93,7 @@ io.on('connection', (socket: Socket) => {
 setInterval(() => {
   console.time('tick')
   playerCommandManager.ExecuteCommands()
+  runEntityLogic()
   io.sockets.emit('state', gameState.convertToEntityDTOArray())
   console.timeEnd('tick')
 }, 1000 / 60)
@@ -75,3 +102,9 @@ setInterval(() => {
 server.listen(3000, () => {
   console.log('Socket server listening on port 3000');
 });
+
+function runEntityLogic(){
+  for (const entity of gameState.entities) {
+    entity.updateComponents()
+  }
+}
