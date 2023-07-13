@@ -2,13 +2,13 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors'
-import { GameState } from './gameState';
-import { Entity } from './entity/entity';
-import { HealthComponent } from './entity/Components/healthComponent'
-import { PositionComponent } from './entity/Components/positionComponent'
-import { SpriteComponent } from './entity/Components/spriteComponent'
-import { PlayerCommandManager } from './playerCommandManager';
-import { findPlayer } from './utils/taghelpers';
+import { GameState } from './gameState.js';
+import { Entity } from './entity/entity.js';
+import { HealthComponent } from './entity/Components/healthComponent.js'
+import { PositionComponent } from './entity/Components/positionComponent.js'
+import { SpriteComponent } from './entity/Components/spriteComponent.js'
+import { PlayerCommandManager } from './playerCommandManager.js';
+import { findPlayer } from './utils/taghelpers.js';
 
 export const gameState = new GameState()
 const playerCommandManager = new PlayerCommandManager(gameState)

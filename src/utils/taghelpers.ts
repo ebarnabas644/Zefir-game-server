@@ -1,4 +1,4 @@
-import type { EntityDictionary } from '../gameState'
+import type { EntityDictionary } from '../gameState.js'
 
 export function findPlayer(socketId: string, state: EntityDictionary){
     const result = state.find(entity => entity.findTag('controlledby') == socketId)

@@ -1,5 +1,5 @@
-import { Component } from './Components/component'
-import type { IScript } from './Interfaces/IScript';
+import { Component } from './Components/component.js'
+import type { IScript } from './Interfaces/IScript.js';
 
 let idCounter = 0
 // Entity class

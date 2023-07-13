@@ -1,7 +1,7 @@
-import { HealthComponent } from './entity/Components/healthComponent'
-import { PositionComponent } from './entity/Components/positionComponent'
-import { SpriteComponent } from './entity/Components/spriteComponent'
-import { Entity } from './entity/entity'
+import { HealthComponent } from './entity/Components/healthComponent.js'
+import { PositionComponent } from './entity/Components/positionComponent.js'
+import { SpriteComponent } from './entity/Components/spriteComponent.js'
+import { Entity } from './entity/entity.js'
 
 export type EntityDictionary = Entity[]
 export type EntityDTO = {

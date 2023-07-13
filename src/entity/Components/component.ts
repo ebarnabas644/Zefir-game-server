@@ -1,4 +1,4 @@
-import { Entity } from '../entity'
+import { Entity } from '../entity.js'
 
 export abstract class Component{
     protected entity?: Entity

@@ -1,7 +1,7 @@
-import { gameState } from "./server"
-import { PositionComponent } from "./entity/Components/positionComponent"
-import { findPlayer, findPlayers } from "./utils/taghelpers"
-import { EntityDictionary, GameState } from "./gameState"
+import { gameState } from "./server.js"
+import { PositionComponent } from "./entity/Components/positionComponent.js"
+import { findPlayer, findPlayers } from "./utils/taghelpers.js"
+import { EntityDictionary, GameState } from "./gameState.js"
 
 export class PlayerCommandManager{
     private activeCommands: {[key: string]: Set<string>}

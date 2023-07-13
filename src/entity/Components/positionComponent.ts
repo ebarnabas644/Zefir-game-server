@@ -4,6 +4,7 @@ type Vec2 = {
   x: number,
   y: number
 }
+import { Component } from './component.js'
 
 export class PositionComponent extends Component {
   public position: Vec2

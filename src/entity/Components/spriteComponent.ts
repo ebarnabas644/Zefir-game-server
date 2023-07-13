@@ -1,5 +1,5 @@
-import { IScript } from '../Interfaces/IScript'
-import { Component } from './component'
+import { IScript } from '../Interfaces/IScript.js'
+import { Component } from './component.js'
 
 export type State<T> = {
   name: string,
