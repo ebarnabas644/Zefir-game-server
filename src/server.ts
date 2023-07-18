@@ -91,11 +91,11 @@ io.on('connection', (socket: Socket) => {
 });
 
 setInterval(() => {
-  console.time('tick')
+  //console.time('tick')
   playerCommandManager.ExecuteCommands()
   runEntityLogic()
   io.sockets.emit('state', gameState.convertToEntityDTOArray())
-  console.timeEnd('tick')
+  //console.timeEnd('tick')
 }, 1000 / 60)
 
 
