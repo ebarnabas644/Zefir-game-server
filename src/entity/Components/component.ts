@@ -4,6 +4,7 @@ export abstract class Component{
     protected entity?: Entity
   
     public onAttach(entity: Entity){
+      this.entity = entity
     }
   
     public onDetach(entity: Entity){
