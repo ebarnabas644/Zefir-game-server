@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: your-app-deployment
+spec:
+  replicas: 1  # Number of replicas to create for your application
+  selector:
+    matchLabels:
+      app: zefir-server
+  template:
+    metadata:
+      labels:
+        app: zefir-server
+    spec:
+      containers:
+        - name: zefir-server
+          image: gcr.io/$PROJECT_ID/zefir/zefir-server:$SHORT_SHA
+          ports:
+            - containerPort: 3000  # Port number on which your application listens
