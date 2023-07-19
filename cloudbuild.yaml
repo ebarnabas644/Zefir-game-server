@@ -17,14 +17,19 @@ steps:
     - 'push'
     - 'europe-west1-docker.pkg.dev/$PROJECT_ID/zefir/zefir-server:$SHORT_SHA'
 
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        sed -i "s/\$SHORT_SHA/${SHORT_SHA}/g" kubernetes.yaml
+
   - name: 'gcr.io/cloud-builders/kubectl'
     id: Deploy
     args:
     - 'apply'
     - '-f'
     - 'kubernetes.yaml'
-    substitutions:
-      _IMAGE_TAG: $SHORT_SHA
     env:
     - 'CLOUDSDK_COMPUTE_REGION=europe-west1-b'
     - 'CLOUDSDK_CONTAINER_CLUSTER=zefir-cluster'
