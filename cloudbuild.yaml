@@ -15,7 +15,7 @@ steps:
     id: Push
     args:
     - 'push'
-    - 'europe-west1-docker.pkg.dev/$PROJECT_ID/zefir/zefir-server:$SHORT_SHA'
+    - 'gcr.io/$PROJECT_ID/zefir/zefir-server:$SHORT_SHA'
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
