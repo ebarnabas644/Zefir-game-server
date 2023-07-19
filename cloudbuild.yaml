@@ -22,7 +22,7 @@ steps:
     args:
       - '-c'
       - |
-        sed -i "s/\$SHORT_SHA/${SHORT_SHA}/g" kubernetes.yaml
+        sed -i "s/SHORT_SHA/${SHORT_SHA}/g" kubernetes.yaml
 
   - name: 'gcr.io/cloud-builders/kubectl'
     id: Deploy
