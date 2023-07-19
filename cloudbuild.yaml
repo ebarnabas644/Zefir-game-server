@@ -26,5 +26,4 @@ steps:
     env:
     - 'CLOUDSDK_COMPUTE_REGION=europe-west1-b'
     - 'CLOUDSDK_CONTAINER_CLUSTER=zefir-cluster'
-    substitutions:
-      _IMAGE_TAG: $SHORT_SHA
+    - 'IMAGE_TAG=$SHORT_SHA'

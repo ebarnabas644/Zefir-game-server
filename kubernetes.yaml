@@ -14,9 +14,6 @@ spec:
     spec:
       containers:
         - name: zefir-server
-          image: gcr.io/$PROJECT_ID/zefir/zefir-server:${_IMAGE_TAG}  #TODO: Not working, use args
+          image: gcr.io/$PROJECT_ID/zefir/zefir-server:$(IMAGE_TAG)  #TODO: Not working, use args
           ports:
             - containerPort: 3000  # Port number on which your application listens
-          env:
-            - name: IMAGE_TAG
-              value: $_IMAGE_TAG
