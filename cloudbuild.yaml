@@ -17,6 +17,14 @@ steps:
     - 'push'
     - 'europe-west1-docker.pkg.dev/$PROJECT_ID/zefir/zefir-server:$SHORT_SHA'
 
+  - name: 'gcr.io/cloud-builders/envsubst'
+    args:
+    - < kubernetes.yaml.template
+    - '-o'
+    - 'kubernetes.yaml'
+    env:
+    - 'ARG_IMAGE_TAG=$SHORT_SHA'
+
   - name: 'gcr.io/cloud-builders/kubectl'
     id: Deploy
     args:
