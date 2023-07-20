@@ -98,6 +98,10 @@ setInterval(() => {
   //console.timeEnd('tick')
 }, 1000 / 60)
 
+app.get('/', (req: any, res: any) => {
+  res.send('Hello, this is your Express.js server!');
+});
+
 
 server.listen(3000, () => {
   console.log('Socket server listening on port 3000');
