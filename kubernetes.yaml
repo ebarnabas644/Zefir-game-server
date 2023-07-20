@@ -17,8 +17,8 @@ spec:
           image: gcr.io/PROJECT_ID/zefir/zefir-server:SHORT_SHA  #TODO: Not working, use args
           resources:
             limits:
-              memory: "300Mi"
-              cpu: "1000m"
+              memory: "128Mi"
+              cpu: "200m"
           ports:
             - containerPort: 3000  # Port number on which your application listens
 ---
