@@ -18,7 +18,7 @@ spec:
           resources:
             limits:
               memory: "500Mi"
-              cpu: "200m"
+              cpu: "5000m"
           ports:
             - containerPort: 3000  # Port number on which your application listens
 ---
