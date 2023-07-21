@@ -23,7 +23,7 @@ kind: BackendConfig
 metadata:
   name: my-backendconfig
 spec:
-  timeoutSec: 120
+  timeoutSec: 2147483647
 ---
 apiVersion: v1
 kind: Service
