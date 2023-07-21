@@ -20,7 +20,8 @@ const io = new Server(server, {
     cors: {
         origin: 'http://localhost:5173'
     },
-    allowEIO3: true
+    allowEIO3: true,
+    pingTimeout: 5000
 });
 
 app.use(cors({
