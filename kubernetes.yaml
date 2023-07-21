@@ -16,13 +16,14 @@ spec:
         - name: zefir-server
           image: gcr.io/PROJECT_ID/zefir/zefir-server:SHORT_SHA  #TODO: Not working, use args
           ports:
-            - containerPort: 3000  # Port number on which your application listens
+            - containerPort: 3000  # Port number on which your application listens      
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: zefir-server-service
 spec:
+  SessionAffinity: ClientIP
   selector:
     app: zefir-server
   ports:
