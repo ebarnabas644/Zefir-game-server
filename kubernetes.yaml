@@ -21,7 +21,7 @@ spec:
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: my-backendconfig
+  name: zefir-server-service-backendconfig
 spec:
   timeoutSec: 86400
 ---
@@ -30,13 +30,11 @@ kind: Service
 metadata:
   name: zefir-server-service
   annotations:
-    cloud.google.com/backend-config: '{"default": "my-backendconfig"}'
+    cloud.google.com/backend-config: '{"default": "zefir-server-service-backendconfig"}'
 spec:
   selector:
     app: zefir-server
-  type: LoadBalancer
   ports:
   - protocol: TCP
     port: 3000
     targetPort: 3000
-    nodePort: 30000
