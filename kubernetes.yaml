@@ -17,6 +17,14 @@ spec:
           image: gcr.io/PROJECT_ID/zefir/zefir-server:SHORT_SHA  #TODO: Not working, use args
           ports:
             - containerPort: 3000  # Port number on which your application listens      
+          livenessProbe:
+            httpGet:
+                path: /health
+                port: 3000
+          readinessProbe:
+            httpGet:
+                path: /health
+                port: 3000
 ---
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
