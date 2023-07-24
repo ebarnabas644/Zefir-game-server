@@ -111,6 +111,7 @@ app.get('/health', (req: any, res: any) => {
 
 server.listen(3000, () => {
   console.log('Socket server listening on port 3000');
+  console.log('test')
 });
 
 function runEntityLogic(){
