@@ -1,5 +1,7 @@
 import express from 'express';
-import { createServer } from 'http';
+import { createServer } from 'https';
+import http from 'http'
+import https from 'https'
 import { Server, Socket } from 'socket.io';
 import cors from 'cors'
 import { GameState } from './gameState.js';
@@ -15,9 +17,10 @@ export const gameState = new GameState()
 const playerCommandManager = new PlayerCommandManager(gameState)
 
 const app: any = express();
-const server = createServer(app);
+const httpServer = http.createServer(app)
+const httpsServer = https.createServer(app)
 const connectedSockets: string[] = []
-const io = new Server(server, {
+const io = new Server(httpServer, {
     cors: {
         origin: ['http://localhost:5173', 'https://zefir.iedre.dev/']
     },
@@ -104,8 +107,11 @@ app.get('/', (req: any, res: any) => {
   res.send('Hello, this is your Express.js server! Running since: '+startDate);
 });
 
+app.get('/health', (req: any, res: any) => {
+  res.sendStatus(200)
+});
 
-server.listen(3000, () => {
+httpServer.listen(3000, () => {
   console.log('Socket server listening on port 3000');
 });
 

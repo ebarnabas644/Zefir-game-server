@@ -19,7 +19,7 @@ spec:
             - containerPort: 3000  # Port number on which your application listens      
           livenessProbe:
             httpGet:
-                path: /
+                path: /health
                 port: 3000
             initialDelaySeconds: 15 
             periodSeconds: 10
@@ -27,7 +27,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-                path: /
+                path: /health
                 port: 3000
             initialDelaySeconds: 15 
             periodSeconds: 10
@@ -44,7 +44,7 @@ spec:
     checkIntervalSec: 60
     port: 3000
     type: HTTP
-    requestPath: /
+    requestPath: /health
 ---
 apiVersion: v1
 kind: Service
