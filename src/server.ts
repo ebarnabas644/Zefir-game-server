@@ -106,6 +106,7 @@ app.get('/', (req: any, res: any) => {
 
 app.get('/health', (req: any, res: any) => {
   res.sendStatus(200)
+  res.send('OK')
 });
 
 
