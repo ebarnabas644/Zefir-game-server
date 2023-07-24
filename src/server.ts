@@ -104,6 +104,10 @@ app.get('/', (req: any, res: any) => {
   res.send('Hello, this is your Express.js server! Running since: '+startDate);
 });
 
+app.get('/health', (req: any, res: any) => {
+  res.sendStatus(200)
+});
+
 
 server.listen(3000, () => {
   console.log('Socket server listening on port 3000');
