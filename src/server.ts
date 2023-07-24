@@ -20,7 +20,7 @@ const app: any = express();
 const httpServer = http.createServer(app)
 const httpsServer = https.createServer(app)
 const connectedSockets: string[] = []
-const io = new Server(httpsServer, {
+const io = new Server(httpServer, {
     cors: {
         origin: ['http://localhost:5173', 'https://zefir.iedre.dev/']
     },
@@ -108,15 +108,10 @@ app.get('/', (req: any, res: any) => {
 });
 
 app.get('/health', (req: any, res: any) => {
-  res.sendStatus(200)
+  res.send('OK')
 });
 
-httpServer.listen(80, () => {
-  console.log('Socket server listening on port 80');
-})
-
-
-httpsServer.listen(3000, () => {
+httpServer.listen(3000, () => {
   console.log('Socket server listening on port 3000');
 });
 
