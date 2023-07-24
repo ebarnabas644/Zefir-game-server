@@ -105,7 +105,6 @@ setInterval(() => {
 
 app.get('/', (req: any, res: any) => {
   res.send('Hello, this is your Express.js server! Running since: '+startDate);
-  res.sendStatus(200)
 });
 
 app.get('/health', (req: any, res: any) => {
