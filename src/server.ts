@@ -108,7 +108,7 @@ app.get('/', (req: any, res: any) => {
 });
 
 app.get('/health', (req: any, res: any) => {
-  res.send('OK')
+  res.sendStatus(200)
 });
 
 httpServer.listen(3000, () => {
