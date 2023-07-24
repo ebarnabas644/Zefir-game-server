@@ -1,5 +1,7 @@
 import express from 'express';
 import { createServer } from 'https';
+import http from 'http'
+import https from 'https'
 import { Server, Socket } from 'socket.io';
 import cors from 'cors'
 import { GameState } from './gameState.js';
@@ -9,21 +11,16 @@ import { PositionComponent } from './entity/Components/positionComponent.js'
 import { SpriteComponent } from './entity/Components/spriteComponent.js'
 import { PlayerCommandManager } from './playerCommandManager.js';
 import { findPlayer } from './utils/taghelpers.js';
-import { constants } from 'crypto';
 
 const startDate = Date.now()
 export const gameState = new GameState()
 const playerCommandManager = new PlayerCommandManager(gameState)
 
-const options = {
-  secureOptions: constants.SSL_OP_NO_TLSv1_2, // Disable TLSv1.2
-  ciphers: 'DEFAULT:!TLSv1.2' // Disable TLSv1.2 cipher suites
-};
-
 const app: any = express();
-const server = createServer(options, app);
+const httpServer = http.createServer(app)
+const httpsServer = https.createServer(app)
 const connectedSockets: string[] = []
-const io = new Server(server, {
+const io = new Server(httpsServer, {
     cors: {
         origin: ['http://localhost:5173', 'https://zefir.iedre.dev/']
     },
@@ -113,13 +110,15 @@ app.get('/', (req: any, res: any) => {
 
 app.get('/health', (req: any, res: any) => {
   res.sendStatus(200)
-  res.send('OK')
 });
 
+httpServer.listen(80, () => {
+  console.log('Socket server listening on port 80');
+})
 
-server.listen(3000, () => {
+
+httpsServer.listen(3000, () => {
   console.log('Socket server listening on port 3000');
-  console.log('test')
 });
 
 function runEntityLogic(){
