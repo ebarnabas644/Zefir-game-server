@@ -19,18 +19,16 @@ spec:
             - containerPort: 3000  # Port number on which your application listens      
           livenessProbe:
             httpGet:
-                scheme: HTTPS
                 path: /health
-                port: 3000
+                port: 80
             initialDelaySeconds: 15 
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
           readinessProbe:
             httpGet:
-                scheme: HTTPS
                 path: /health
-                port: 3000
+                port: 80
             initialDelaySeconds: 15 
             periodSeconds: 10
             timeoutSeconds: 5
