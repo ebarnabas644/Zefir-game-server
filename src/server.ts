@@ -10,6 +10,7 @@ import { SpriteComponent } from './entity/Components/spriteComponent.js'
 import { PlayerCommandManager } from './playerCommandManager.js';
 import { findPlayer } from './utils/taghelpers.js';
 
+const startDate = Date.now()
 export const gameState = new GameState()
 const playerCommandManager = new PlayerCommandManager(gameState)
 
@@ -100,7 +101,7 @@ setInterval(() => {
 }, 1000 / 60)
 
 app.get('/', (req: any, res: any) => {
-  res.send('Hello, this is your Express.js server!');
+  res.send('Hello, this is your Express.js server! Running since: '+startDate);
 });
 
 
