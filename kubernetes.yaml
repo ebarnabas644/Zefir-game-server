@@ -21,10 +21,18 @@ spec:
             httpGet:
                 path: /health
                 port: 3000
+            initialDelaySeconds: 15 
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           readinessProbe:
             httpGet:
                 path: /health
                 port: 3000
+            initialDelaySeconds: 15 
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
 ---
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
