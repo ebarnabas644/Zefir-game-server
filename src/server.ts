@@ -9,13 +9,19 @@ import { PositionComponent } from './entity/Components/positionComponent.js'
 import { SpriteComponent } from './entity/Components/spriteComponent.js'
 import { PlayerCommandManager } from './playerCommandManager.js';
 import { findPlayer } from './utils/taghelpers.js';
+import { constants } from 'crypto';
 
 const startDate = Date.now()
 export const gameState = new GameState()
 const playerCommandManager = new PlayerCommandManager(gameState)
 
+const options = {
+  secureOptions: constants.SSL_OP_NO_TLSv1_2, // Disable TLSv1.2
+  ciphers: 'DEFAULT:!TLSv1.2' // Disable TLSv1.2 cipher suites
+};
+
 const app: any = express();
-const server = createServer(app);
+const server = createServer(options, app);
 const connectedSockets: string[] = []
 const io = new Server(server, {
     cors: {
