@@ -17,14 +17,6 @@ spec:
           image: gcr.io/PROJECT_ID/zefir/zefir-server:SHORT_SHA  #TODO: Not working, use args
           ports:
             - containerPort: 3000  # Port number on which your application listens      
-          livenessProbe:
-            httpGet:
-                path: /
-                port: 3000
-            initialDelaySeconds: 15 
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
           readinessProbe:
             httpGet:
                 path: /
