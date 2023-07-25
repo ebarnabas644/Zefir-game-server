@@ -16,8 +16,8 @@ export class MovementComponent extends Component implements IScript{
     }
 
     setMovementVector(x: number, y: number){
-        this.movementVector.x += x
-        this.movementVector.y += y
+        this.movementVector.x = x
+        this.movementVector.y = y
         v.normalize(null, this.movementVector, this.speed)
     }
 
