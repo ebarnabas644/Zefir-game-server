@@ -18,6 +18,10 @@ export class SpriteComponent extends Component implements IScript {
     this.states.push(state)
   }
 
+  public start(): void {
+        
+  }
+
   public update(){
     for (const state of this.states) {
       const isRequirementMet = state.requirement(...state.params)
