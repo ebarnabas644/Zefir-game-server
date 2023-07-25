@@ -110,7 +110,7 @@ io.on('connection', (socket: Socket) => {
     player.initComponents()
     gameState.entities.push(player)
     connectedSockets.push(socket.id)
-    socket.emit('playerCreated', '')
+    socket.emit('playerCreated', player.name)
     socket.on('playerCommand', (commands: any) => {
       playerCommandManager.setCommands(commands, socket.id)
     })
