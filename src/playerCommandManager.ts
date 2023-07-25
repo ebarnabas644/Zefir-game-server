@@ -7,9 +7,13 @@ import { MovementComponent } from "./entity/Components/movementComponent.js"
 export class PlayerCommandManager{
     private activeCommands: {[key: string]: Set<string>}
     private state: GameState
+    private horizontalInputAxis: number
+    private verticalInputAxis: number
     constructor(gameState: GameState){
         this.activeCommands = {}
         this.state = gameState
+        this.horizontalInputAxis = 0
+        this.verticalInputAxis = 0
     }
 
     public setCommands(commands: Set<string>, socketId: string){
@@ -30,22 +34,25 @@ export class PlayerCommandManager{
           const movementComponent = player.getComponent('movement') as MovementComponent
           const posComp = player.getComponent('position') as PositionComponent
           if(player.commandBuffer.size == 0){
-            movementComponent.stopMovement()
+            this.horizontalInputAxis = 0
+            this.verticalInputAxis = 0
           }
             for (const command of player.commandBuffer) {
               if(command == "leftMoveCommand"){
-                movementComponent.setMovementVector(-7, 0)
+                this.horizontalInputAxis = -7
               }
               else if(command == "rightMoveCommand"){
-                movementComponent.setMovementVector(7, 0)
+                this.horizontalInputAxis = 7
               }
               else if(command == "upMoveCommand"){
-                movementComponent.setMovementVector(0, -7)
+                this.verticalInputAxis = -7
               }
               else if(command == "downMoveCommand"){
-                movementComponent.setMovementVector(0, 7)
+                this.verticalInputAxis = 7
               }
             }
+            
+            movementComponent.setMovementVector(this.horizontalInputAxis, this.verticalInputAxis)
         }
     }
 }
