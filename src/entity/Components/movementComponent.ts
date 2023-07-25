@@ -5,7 +5,7 @@ import { PositionComponent } from './positionComponent.js'
 import * as v from "@thi.ng/vectors";
 
 export class MovementComponent extends Component implements IScript{
-    private movementVector: Vec2
+    public movementVector: Vec2
     private speed: number
     private positionComponent?: PositionComponent
 

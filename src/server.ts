@@ -51,28 +51,59 @@ io.on('connection', (socket: Socket) => {
     player.addComponent('movement', new MovementComponent())
     const spriteComponent = player.getComponent('sprite') as SpriteComponent
     if(spriteComponent){
-      const positionComponent = player.getComponent('position') as PositionComponent
-      if(positionComponent){
+      const movementComponent = player.getComponent('movement') as MovementComponent
+      if(movementComponent){
         spriteComponent.addState({
           name: 'idle',
-          requirement: (positionComponent: PositionComponent) => {
-            if(positionComponent.speed == 0){
+          requirement: (movementComponent: MovementComponent) => {
+            if(movementComponent.movementVector.x == 0 && movementComponent.movementVector.y == 0){
               return true
             }
             return false
           },
-          params: [positionComponent]
+          params: [movementComponent]
         })
         spriteComponent.addState({
-          name: 'run',
-          requirement: (positionComponent: PositionComponent) => {
-            if(positionComponent.speed > 0){
+          name: 'runRight',
+          requirement: (movementComponent: MovementComponent) => {
+            if(movementComponent.movementVector.x > 0){
               return true
             }
             return false
           },
-          params: [positionComponent]
+          params: [movementComponent]
         })
+        spriteComponent.addState({
+          name: 'runLeft',
+          requirement: (movementComponent: MovementComponent) => {
+            if(movementComponent.movementVector.x < 0){
+              return true
+            }
+            return false
+          },
+          params: [movementComponent]
+        })
+        spriteComponent.addState({
+          name: 'runUp',
+          requirement: (movementComponent: MovementComponent) => {
+            if(movementComponent.movementVector.y < 0){
+              return true
+            }
+            return false
+          },
+          params: [movementComponent]
+        })
+        spriteComponent.addState({
+          name: 'runDown',
+          requirement: (movementComponent: MovementComponent) => {
+            if(movementComponent.movementVector.y > 0){
+              return true
+            }
+            return false
+          },
+          params: [movementComponent]
+        })
+        
       }
     }
     player.addTag('controlledby', socket.id)
