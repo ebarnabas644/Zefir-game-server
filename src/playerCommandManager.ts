@@ -53,6 +53,8 @@ export class PlayerCommandManager{
             }
             
             movementComponent.setMovementVector(this.horizontalInputAxis, this.verticalInputAxis)
+            this.horizontalInputAxis = 0
+            this.verticalInputAxis = 0
         }
     }
 }
