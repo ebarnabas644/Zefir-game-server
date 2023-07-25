@@ -2,6 +2,7 @@ import { gameState } from "./server.js"
 import { PositionComponent } from "./entity/Components/positionComponent.js"
 import { findPlayer, findPlayers } from "./utils/taghelpers.js"
 import { EntityDictionary, GameState } from "./gameState.js"
+import { MovementComponent } from "./entity/Components/movementComponent.js"
 
 export class PlayerCommandManager{
     private activeCommands: {[key: string]: Set<string>}
@@ -26,26 +27,23 @@ export class PlayerCommandManager{
         const players = findPlayers(this.state.entities)
         for (let index = 0; index < players.length; index++) {
           const player = players[index];
+          const movementComponent = player.getComponent('movement') as MovementComponent
           const posComp = player.getComponent('position') as PositionComponent
           if(player.commandBuffer.size == 0){
-            posComp.speed = 0
+            movementComponent.stopMovement()
           }
             for (const command of player.commandBuffer) {
               if(command == "leftMoveCommand"){
-                posComp.position.x -= 7
-                posComp.speed = 7
+                movementComponent.setMovementVector(-7, 0)
               }
               else if(command == "rightMoveCommand"){
-                posComp.position.x += 7
-                posComp.speed = 7
+                movementComponent.setMovementVector(7, 0)
               }
               else if(command == "upMoveCommand"){
-                posComp.position.y -= 7
-                posComp.speed = 7
+                movementComponent.setMovementVector(0, -7)
               }
               else if(command == "downMoveCommand"){
-                posComp.position.y += 7
-                posComp.speed = 7
+                movementComponent.setMovementVector(0, 7)
               }
             }
         }

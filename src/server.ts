@@ -11,6 +11,7 @@ import { PositionComponent } from './entity/Components/positionComponent.js'
 import { SpriteComponent } from './entity/Components/spriteComponent.js'
 import { PlayerCommandManager } from './playerCommandManager.js';
 import { findPlayer } from './utils/taghelpers.js';
+import { MovementComponent } from './entity/Components/movementComponent.js';
 
 const startDate = Date.now()
 export const gameState = new GameState()
@@ -47,6 +48,7 @@ io.on('connection', (socket: Socket) => {
     player.addComponent('health', new HealthComponent(100))
     player.addComponent('position', new PositionComponent(Math.floor(Math.random() * (200 - 50 + 1)) + 50, Math.floor(Math.random() * (200 - 50 + 1)) + 50))
     player.addComponent('sprite', new SpriteComponent('player.png', true, 'idle'))
+    player.addComponent('movement', new MovementComponent())
     const spriteComponent = player.getComponent('sprite') as SpriteComponent
     if(spriteComponent){
       const positionComponent = player.getComponent('position') as PositionComponent
@@ -74,6 +76,7 @@ io.on('connection', (socket: Socket) => {
       }
     }
     player.addTag('controlledby', socket.id)
+    player.initComponents()
     gameState.entities.push(player)
     connectedSockets.push(socket.id)
     socket.emit('playerCreated', '')
