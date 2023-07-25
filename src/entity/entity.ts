@@ -32,6 +32,15 @@ export class Entity {
     delete this.components[componentName];
   }
 
+  initComponents(){
+    for (const key in this.components){
+      const component = this.components[key]
+      if(this.isScriptComponent(component)){
+        component.start()
+      }
+    }
+  }
+
   updateComponents(){
     for (const key in this.components){
       const component = this.components[key]
