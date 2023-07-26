@@ -23,14 +23,14 @@ const httpsServer = https.createServer(app)
 const connectedSockets: string[] = []
 const io = new Server(httpServer, {
     cors: {
-        origin: ['http://localhost:5173', 'https://zefir.iedre.dev/']
+        origin: ['http://localhost:5173', 'https://zefir.iedre.dev/', 'https://iedre.dev/']
     },
     allowEIO3: true,
     pingTimeout: 5000
 });
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://zefir.iedre.dev/']
+    origin: ['http://localhost:5173', 'https://zefir.iedre.dev/', 'https://iedre.dev/']
 }))
 
 io.on('connection', (socket: Socket) => {
