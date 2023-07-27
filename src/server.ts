@@ -8,7 +8,6 @@ import { Entity } from './entity/entity.js'
 import { HealthComponent } from './entity/Components/healthComponent.js'
 import { PositionComponent } from './entity/Components/positionComponent.js'
 import { RequirementCallback, SpriteComponent } from './entity/Components/spriteComponent.js'
-import { PlayerCommandManager } from './playerCommandManager.js'
 import { MovementComponent } from './entity/Components/movementComponent.js'
 import { ActionQueueComponent } from './entity/Components/actionQueueComponent.js'
 import { InputSystem } from './systems/inputSystem.js'
@@ -19,7 +18,6 @@ import { MovementSystem } from './systems/movementSystem.js'
 
 const startDate = Date.now()
 export const gameState = new GameState()
-const playerCommandManager = new PlayerCommandManager(gameState)
 const inputSystem = new InputSystem(gameState)
 const actionExecutionSystem = new ActionExecutionSystem(gameState)
 const animationStateSystem = new AnimationStateSystem(gameState)
