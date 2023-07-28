@@ -2,6 +2,7 @@ import { HealthComponent } from './entity/Components/healthComponent.js'
 import { PositionComponent } from './entity/Components/positionComponent.js'
 import { SpriteComponent } from './entity/Components/spriteComponent.js'
 import { Entity } from './entity/entity.js'
+import { MapDictionary } from './models/mapDictionary.js'
 
 export type EntityDictionary = Entity[]
 export type EntityDTO = {
@@ -18,9 +19,12 @@ type EntityDTODictionary = EntityDTO[]
 
 export class GameState {
         public entities: EntityDictionary
+        public mapDictionary: MapDictionary
 
         constructor() {
                 this.entities = []
+                this.mapDictionary = new MapDictionary(20)
+                //TODO: convert map layers into DTO and send to client with system component
         }
 
         public convertToEntityDTOArray(): EntityDTODictionary {
