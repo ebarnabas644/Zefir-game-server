@@ -15,9 +15,12 @@ import { ActionExecutionSystem } from './systems/actionExecutionSystem.js'
 import { StateComponent } from './entity/Components/stateComponent.js'
 import { AnimationStateSystem } from './systems/animationStateSystem.js'
 import { MovementSystem } from './systems/movementSystem.js'
+import { MapInitSystem } from './systems/mapInitSystem.js'
 
 const startDate = Date.now()
 export const gameState = new GameState()
+const mapInitSystem = new MapInitSystem(gameState, './dist/assets/maps')
+mapInitSystem.start()
 const inputSystem = new InputSystem(gameState)
 const actionExecutionSystem = new ActionExecutionSystem(gameState)
 const animationStateSystem = new AnimationStateSystem(gameState)
