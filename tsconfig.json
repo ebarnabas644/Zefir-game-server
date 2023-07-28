@@ -1,11 +1,12 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "outDir": "dist",
-      "moduleResolution": "NodeNext",
-      "strict": true,
-      "esModuleInterop": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
-  }
+        "compilerOptions": {
+                "target": "ES6",
+                "outDir": "dist",
+                "moduleResolution": "NodeNext",
+                "strict": true,
+                "esModuleInterop": true,
+                "rootDir": "./src"
+        },
+        "include": ["src/**/*"],
+        "exclude": ["node_modules"]
+}
