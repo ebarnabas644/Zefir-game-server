@@ -19,7 +19,9 @@ export class ActionExecutionSystem implements ISystem {
         }
 
         update(): void {
-                const actionQueues = this.state.entities.map((x) => x.getComponent('actionQueue') as ActionQueueComponent)
+                const actionQueues = this.state.entities
+                        .map((x) => x.getComponent('actionQueue') as ActionQueueComponent)
+                        .filter((x) => x !== undefined)
                 actionQueues.forEach((x) => this.executeActions(x))
         }
 
