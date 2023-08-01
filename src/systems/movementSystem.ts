@@ -14,7 +14,9 @@ export class MovementSystem implements ISystem {
                 throw new Error('Method not implemented.')
         }
         update(): void {
-                const movementComponents = this.state.entities.map((x) => x.getComponent('movement') as MovementComponent)
+                const movementComponents = this.state.entities
+                        .map((x) => x.getComponent('movement') as MovementComponent)
+                        .filter((x) => x !== undefined)
                 movementComponents.forEach((x) => this.calculateMovement(x))
         }
 
