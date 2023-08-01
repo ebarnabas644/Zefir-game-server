@@ -31,16 +31,16 @@ export class ActionExecutionSystem implements ISystem {
                 if (!movementComponent || !stateComponent) return
                 stateComponent.state = 'idle'
                 for (const command of actionQueue.actions) {
-                        if (command == 'leftMoveCommand') {
+                        if (command.name == 'leftMoveCommand') {
                                 this.inputAxis.x = -7
                                 stateComponent.state = 'movement'
-                        } else if (command == 'rightMoveCommand') {
+                        } else if (command.name == 'rightMoveCommand') {
                                 this.inputAxis.x = 7
                                 stateComponent.state = 'movement'
-                        } else if (command == 'upMoveCommand') {
+                        } else if (command.name == 'upMoveCommand') {
                                 this.inputAxis.y = -7
                                 stateComponent.state = 'movement'
-                        } else if (command == 'downMoveCommand') {
+                        } else if (command.name == 'downMoveCommand') {
                                 this.inputAxis.y = 7
                                 stateComponent.state = 'movement'
                         }
