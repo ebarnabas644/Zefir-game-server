@@ -16,6 +16,10 @@ import { StateComponent } from './entity/Components/stateComponent.js'
 import { AnimationStateSystem } from './systems/animationStateSystem.js'
 import { MovementSystem } from './systems/movementSystem.js'
 import { MapInitSystem } from './systems/mapInitSystem.js'
+import { HitboxComponent } from './entity/Components/hitboxComponent.js'
+import { MonsterSpawnerSystem } from './systems/monsterSpawnerSystem.js'
+import { StrategyPlayerSystem } from './systems/strategyPlayerSystem.js'
+import { StrategyStateUpdateSystem } from './systems/strategyStateUpdateSystem.js'
 
 const startDate = Date.now()
 export const gameState = new GameState()
@@ -25,6 +29,9 @@ const inputSystem = new InputSystem(gameState)
 const actionExecutionSystem = new ActionExecutionSystem(gameState)
 const animationStateSystem = new AnimationStateSystem(gameState)
 const movementSystem = new MovementSystem(gameState)
+const monsterSpawnerSystem = new MonsterSpawnerSystem(gameState)
+const strategyPlayerSystem = new StrategyPlayerSystem(gameState)
+const strategyUpdateSystem = new StrategyStateUpdateSystem(gameState)
 
 const app: Express = express()
 const httpServer = http.createServer(app)
@@ -45,10 +52,8 @@ app.use(
 
 io.on('connection', (socket: Socket) => {
         console.log('Player connected: ' + socket.id)
-        // Handle socket events and logic here
 
         socket.on('message', (message: string) => {
-                //console.log('Message received: ' + message)
                 socket.broadcast.emit('response', gameState.findPlayer(socket.id)?.name + ': ' + message)
         })
 
@@ -64,10 +69,12 @@ io.on('connection', (socket: Socket) => {
                         )
                 )
                 player.addComponent('sprite', new SpriteComponent('player.png', true, 'idle'))
+                player.addComponent('hitbox', new HitboxComponent(48, 48))
                 player.addComponent('movement', new MovementComponent())
                 player.addComponent('actionQueue', new ActionQueueComponent())
                 player.addComponent('state', new StateComponent())
                 player.addTag('controlledby', socket.id)
+                player.addTag('targetableByMob', true)
                 player.initComponents()
                 gameState.entities.push(player)
                 connectedSockets.push(socket.id)
@@ -99,6 +106,9 @@ setInterval(() => {
         actionExecutionSystem.update()
         movementSystem.update()
         animationStateSystem.update()
+        monsterSpawnerSystem.update()
+        strategyUpdateSystem.update()
+        strategyPlayerSystem.update()
         runEntityLogic()
         io.sockets.emit('state', gameState.convertToEntityDTOArray())
         //console.timeEnd('tick')
