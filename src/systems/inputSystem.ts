@@ -1,4 +1,4 @@
-import { ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
+import { Action, ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
 import { GameState } from '../gameState.js'
 
 export class InputSystem {
@@ -12,6 +12,23 @@ export class InputSystem {
                 if (!player) return
                 const actionQueueComponent = player.getComponent('actionQueue') as ActionQueueComponent
                 if (!actionQueueComponent) return
-                actionQueueComponent.actions = new Set(inputs)
+                const actions: Action[] = []
+                for (const input of inputs) {
+                        const actionToAdd: Action = {
+                                name: input
+                        }
+                        let exists = false
+                        for (const action of actions) {
+                                if (actionToAdd.name == action.name) {
+                                        exists = true
+                                        break
+                                }
+                        }
+
+                        if (exists) continue
+                        actions.push(actionToAdd)
+                }
+
+                actionQueueComponent.actions = actions
         }
 }
