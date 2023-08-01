@@ -15,7 +15,9 @@ export class AnimationStateSystem implements ISystem {
                 throw new Error('Method not implemented.')
         }
         update(): void {
-                const states = this.state.entities.map((x) => x.getComponent('state') as StateComponent)
+                const states = this.state.entities
+                        .map((x) => x.getComponent('state') as StateComponent)
+                        .filter((x) => x !== undefined)
                 states.forEach((x) => this.calculateAnimationState(x))
         }
 
