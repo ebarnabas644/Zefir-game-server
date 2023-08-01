@@ -20,10 +20,12 @@ type EntityDTODictionary = EntityDTO[]
 export class GameState {
         public entities: EntityDictionary
         public mapDictionary: MapDictionary
+        public monsterSpawners: Entity[]
 
         constructor() {
                 this.entities = []
                 this.mapDictionary = new MapDictionary(20)
+                this.monsterSpawners = []
                 //TODO: convert map layers into DTO and send to client with system component
         }
 
