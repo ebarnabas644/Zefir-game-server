@@ -10,7 +10,7 @@ import { PositionComponent } from './entity/Components/positionComponent.js'
 import { RequirementCallback, SpriteComponent } from './entity/Components/spriteComponent.js'
 import { MovementComponent } from './entity/Components/movementComponent.js'
 import { ActionQueueComponent } from './entity/Components/actionQueueComponent.js'
-import { InputSystem } from './systems/inputSystem.js'
+import { InputSystem, type InputEvent } from './systems/inputSystem.js'
 import { ActionExecutionSystem } from './systems/actionExecutionSystem.js'
 import { StateComponent } from './entity/Components/stateComponent.js'
 import { AnimationStateSystem } from './systems/animationStateSystem.js'
@@ -70,7 +70,7 @@ io.on('connection', (socket: Socket) => {
                 )
                 player.addComponent('sprite', new SpriteComponent('player.png', true, 'idle'))
                 player.addComponent('hitbox', new HitboxComponent(48, 48))
-                player.addComponent('movement', new MovementComponent())
+                player.addComponent('movement', new MovementComponent(7))
                 player.addComponent('actionQueue', new ActionQueueComponent())
                 player.addComponent('state', new StateComponent())
                 player.addTag('controlledby', socket.id)
@@ -82,7 +82,7 @@ io.on('connection', (socket: Socket) => {
                 socket.broadcast.emit('chat-playerJoined', player.name)
         })
 
-        socket.on('playerCommand', (commands: string[]) => {
+        socket.on('playerCommand', (commands: InputEvent[]) => {
                 //playerCommandManager.setCommands(commands, socket.id)
                 inputSystem.setInputs(commands, socket.id)
         })
