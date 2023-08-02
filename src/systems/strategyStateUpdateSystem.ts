@@ -28,6 +28,7 @@ export class StrategyStateUpdateSystem implements ISystem {
                         const tag = x.findTag('targetableByMob')
                         return tag !== undefined && tag == true
                 })
+                strategyComponent.strategy = 'idle'
                 mobTargets.forEach((entity) => {
                         const targetPos = entity.getComponent('position') as PositionComponent
                         if (!targetPos) return
