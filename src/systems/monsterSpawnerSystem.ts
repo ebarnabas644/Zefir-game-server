@@ -10,6 +10,7 @@ import { StrategyComponent } from '../entity/Components/strategyComponent.js'
 import { SpawnInfoComponent } from '../entity/Components/spawnInfoComponent.js'
 import { Vec2 } from '@thi.ng/vectors/vec2'
 import { ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
+import { MovementComponent } from '../entity/Components/movementComponent.js'
 
 export class MonsterSpawnerSystem implements ISystem {
         public state: GameState
@@ -59,6 +60,7 @@ export class MonsterSpawnerSystem implements ISystem {
                 enemy.addComponent('strategy', new StrategyComponent())
                 enemy.addComponent('spawnInfo', new SpawnInfoComponent(spawnPos.x, spawnPos.y))
                 enemy.addComponent('actionQueue', new ActionQueueComponent())
+                enemy.addComponent('movement', new MovementComponent(2))
                 spawnerInfo.mobs.push(enemy)
                 this.state.entities.push(enemy)
         }
