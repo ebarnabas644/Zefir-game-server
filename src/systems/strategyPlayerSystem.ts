@@ -3,7 +3,7 @@ import { SpawnInfoComponent } from '../entity/Components/spawnInfoComponent.js'
 import { StrategyComponent } from '../entity/Components/strategyComponent.js'
 import { GameState } from '../gameState.js'
 import { ISystem } from './Interfaces/ISystem.js'
-import { Action } from '../entity/Components/actionQueueComponent.js'
+import { Action, ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
 
 export class StrategyPlayerSystem implements ISystem {
         state: GameState
@@ -24,20 +24,27 @@ export class StrategyPlayerSystem implements ISystem {
         playStrategy(strategyComponent: StrategyComponent) {
                 const entity = strategyComponent.entity
                 if (!entity) return
+                const actionQueue = entity.getComponent('actionQueue') as ActionQueueComponent
+                if (!actionQueue) return
+                // Idle strategy, TODO: strategy collection
                 if (strategyComponent.strategy == 'idle') {
+                        if (actionQueue.hasActionByName('goToTarget')) return
                         const spawnInfo = entity.getComponent('spawnInfo') as SpawnInfoComponent
                         if (!spawnInfo) return
                         const randomPos = new Vec2([
-                                this.randomNumberInRange(spawnInfo.spawnPosition.x - 50, spawnInfo.spawnPosition.x + 50),
-                                this.randomNumberInRange(spawnInfo.spawnPosition.y - 50, spawnInfo.spawnPosition.y + 50)
+                                this.randomNumberInRange(spawnInfo.spawnPosition.x - 100, spawnInfo.spawnPosition.x + 100),
+                                this.randomNumberInRange(spawnInfo.spawnPosition.y - 100, spawnInfo.spawnPosition.y + 100)
                         ])
                         const goToRandomCoordAction: Action = {
                                 name: 'goToTarget',
+                                duration: -1,
                                 data: {
                                         xPos: randomPos.x,
                                         yPos: randomPos.y
                                 }
                         }
+
+                        actionQueue.addActionToQueue(goToRandomCoordAction)
                 }
         }
 
