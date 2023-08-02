@@ -6,9 +6,9 @@ export class MovementComponent extends Component {
         public movementVector: Vec2
         public speed: number
 
-        constructor() {
+        constructor(speed: number) {
                 super()
-                this.speed = 7
+                this.speed = speed
                 this.movementVector = new Vec2([0, 0])
         }
 
