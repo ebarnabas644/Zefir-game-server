@@ -32,6 +32,8 @@ export class AnimationStateSystem implements ISystem {
                 const movementVector = movementComponent.movementVector
                 if (stateComponent.state == 'idle') {
                         spriteComponent.state = 'idle'
+                } else if (stateComponent.state == 'attack') {
+                        spriteComponent.state = 'meleeRight'
                 } else if (stateComponent.state == 'movement') {
                         if (movementVector.x > 0) {
                                 spriteComponent.state = 'runRight'
