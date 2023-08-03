@@ -28,6 +28,8 @@
                 "@thi.ng/vectors": "^7.7.0",
                 "cors": "^2.8.5",
                 "express": "^4.18.2",
+                "inversify": "^6.0.1",
+                "reflect-metadata": "^0.1.13",
                 "socket.io": "^4.7.1",
                 "xml2js": "^0.6.2"
         }

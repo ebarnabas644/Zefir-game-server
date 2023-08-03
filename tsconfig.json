@@ -1,11 +1,15 @@
 {
         "compilerOptions": {
                 "target": "ES6",
+                "lib": ["es6"],
+                "types": ["reflect-metadata"],
                 "outDir": "dist",
                 "moduleResolution": "NodeNext",
                 "strict": true,
                 "esModuleInterop": true,
-                "rootDir": "./src"
+                "rootDir": "./src",
+                "experimentalDecorators": true,
+                "emitDecoratorMetadata": true
         },
         "include": ["src/**/*"],
         "exclude": ["node_modules"]
