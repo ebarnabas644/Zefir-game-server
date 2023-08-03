@@ -35,35 +35,50 @@ export class ActionExecutionSystem implements ISystem {
                 const stateComponent = entity.getComponent('state') as StateComponent
                 if (!movementComponent || !stateComponent || !positionComponent) return
                 stateComponent.state = 'idle'
-                for (const command of actionQueue.actions) {
-                        if (command.name == 'leftMoveCommand') {
-                                this.inputAxis.x = -7
-                                stateComponent.state = 'movement'
-                        } else if (command.name == 'rightMoveCommand') {
-                                this.inputAxis.x = 7
-                                stateComponent.state = 'movement'
-                        } else if (command.name == 'upMoveCommand') {
-                                this.inputAxis.y = -7
-                                stateComponent.state = 'movement'
-                        } else if (command.name == 'downMoveCommand') {
-                                this.inputAxis.y = 7
-                                stateComponent.state = 'movement'
-                        } else if (command.name == 'goToTarget') {
-                                const entityPos = positionComponent.position
-                                const targetPos = new Vec2([command.data!.xPos as number, command.data!.yPos as number])
-                                const distance = v.dist(targetPos, entityPos)
-                                if (distance < 10) {
-                                        actionQueue.removeAction(command)
-                                        continue
+                if (actionQueue.blockingActions.length != 0) {
+                        for (const command of actionQueue.blockingActions) {
+                                if (command.name == 'attack') {
+                                        const pos = new Vec2([command.data!.xPos as number, command.data!.yPos as number])
+                                        console.log(`he attac this position: x:${pos.x} y:${pos.y}`)
+                                        stateComponent.state = 'attack'
                                 }
-                                v.direction2(this.inputAxis, entityPos, targetPos, 2)
-                                stateComponent.state = 'movement'
-                        } else if (command.name == 'attack') {
-                                const pos = new Vec2([command.data!.xPos as number, command.data!.yPos as number])
-                                console.log(`he attac this position: x:${pos.x} y:${pos.y}`)
-                                stateComponent.state = 'attack'
+                                if (command.duration >= 1) {
+                                        command.duration -= 1
+                                }
+                        }
+                } else {
+                        for (const command of actionQueue.actions) {
+                                if (command.name == 'leftMoveCommand') {
+                                        this.inputAxis.x = -7
+                                        stateComponent.state = 'movement'
+                                } else if (command.name == 'rightMoveCommand') {
+                                        this.inputAxis.x = 7
+                                        stateComponent.state = 'movement'
+                                } else if (command.name == 'upMoveCommand') {
+                                        this.inputAxis.y = -7
+                                        stateComponent.state = 'movement'
+                                } else if (command.name == 'downMoveCommand') {
+                                        this.inputAxis.y = 7
+                                        stateComponent.state = 'movement'
+                                } else if (command.name == 'goToTarget') {
+                                        const entityPos = positionComponent.position
+                                        const targetPos = new Vec2([command.data!.xPos as number, command.data!.yPos as number])
+                                        const distance = v.dist(targetPos, entityPos)
+                                        if (distance < 10) {
+                                                actionQueue.removeAction(command)
+                                                continue
+                                        }
+                                        v.direction2(this.inputAxis, entityPos, targetPos, 2)
+                                        stateComponent.state = 'movement'
+                                }
+                                if (command.duration >= 1) {
+                                        command.duration -= 1
+                                }
                         }
                 }
+
+                actionQueue.actions = actionQueue.actions.filter((x) => x.duration >= 1 || x.duration == -1)
+                actionQueue.blockingActions = actionQueue.blockingActions.filter((x) => x.duration >= 1 || x.duration == -1)
 
                 movementComponent.setMovementVector(this.inputAxis.x, this.inputAxis.y)
                 this.inputAxis.x = 0
