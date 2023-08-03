@@ -8,10 +8,12 @@ export type Action = {
 
 export class ActionQueueComponent extends Component {
         public actions: Action[]
+        public blockingActions: Action[]
 
         constructor() {
                 super()
                 this.actions = []
+                this.blockingActions = []
         }
 
         public hasAction(action: Action): boolean {
@@ -28,6 +30,20 @@ export class ActionQueueComponent extends Component {
                 const result = this.actions.find((x) => x.name == actionToAdd.name)
                 if (result) return
                 this.actions.push(actionToAdd)
+        }
+
+        public addActionToBlockingQueue(actionToAdd: Action) {
+                const result = this.blockingActions.find((x) => x.name == actionToAdd.name)
+                if (result) return
+                this.blockingActions.push(actionToAdd)
+        }
+
+        public removeBlockingActionByName(actionName: string) {
+                const result = this.blockingActions.find((x) => x.name == actionName)
+                if (!result) return
+                const index = this.actions.indexOf(result)
+                if (index == -1) return
+                this.blockingActions.splice(index, 1)
         }
 
         public removeAction(action: Action) {
