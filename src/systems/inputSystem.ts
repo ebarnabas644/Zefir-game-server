@@ -19,21 +19,21 @@ export class InputSystem {
                 if (!actionQueueComponent) return
                 const actions: Action[] = []
                 for (const input of inputs) {
-                        const actionToAdd: Action = {
-                                name: input.input,
-                                duration: 1,
-                                data: input.data
-                        }
-                        let exists = false
-                        for (const action of actions) {
-                                if (actionToAdd.name == action.name) {
-                                        exists = true
-                                        break
+                        if (input.input == 'attack') {
+                                const actionToAdd: Action = {
+                                        name: input.input,
+                                        duration: 10,
+                                        data: input.data
                                 }
+                                actionQueueComponent.addActionToBlockingQueue(actionToAdd)
+                        } else {
+                                const actionToAdd: Action = {
+                                        name: input.input,
+                                        duration: -1,
+                                        data: input.data
+                                }
+                                actions.push(actionToAdd)
                         }
-
-                        if (exists) continue
-                        actions.push(actionToAdd)
                 }
 
                 actionQueueComponent.actions = actions
