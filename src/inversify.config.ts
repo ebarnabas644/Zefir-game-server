@@ -6,7 +6,9 @@ import { IGameState } from './gameState/IGameState.js'
 import { GameState } from './gameState/gameState.js'
 import { buildProviderModule } from 'inversify-binding-decorators'
 
-// TODO: generate side effect imports here with plop library
+import './strategies/animationState/attackAnimationStrategy.js'
+
+// TODO: replace manual side effect import with plop library generation
 const container = new Container()
 container.bind<ISystem>(TYPES.ISystem).to(AnimationStateSystem)
 
