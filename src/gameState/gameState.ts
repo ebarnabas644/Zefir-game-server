@@ -1,8 +1,10 @@
-import { HealthComponent } from './entity/Components/healthComponent.js'
-import { PositionComponent } from './entity/Components/positionComponent.js'
-import { SpriteComponent } from './entity/Components/spriteComponent.js'
-import { Entity } from './entity/entity.js'
-import { MapDictionary } from './models/mapDictionary.js'
+import { injectable } from 'inversify'
+import { HealthComponent } from '../entity/Components/healthComponent.js'
+import { PositionComponent } from '../entity/Components/positionComponent.js'
+import { SpriteComponent } from '../entity/Components/spriteComponent.js'
+import { Entity } from '../entity/entity.js'
+import { MapDictionary } from '../models/mapDictionary.js'
+import { IGameState } from './IGameState.js'
 
 export type EntityDictionary = Entity[]
 export type EntityDTO = {
@@ -15,9 +17,10 @@ export type EntityDTO = {
         tags: { [key: string]: any }
 }
 
-type EntityDTODictionary = EntityDTO[]
+export type EntityDTODictionary = EntityDTO[]
 
-export class GameState {
+@injectable()
+export class GameState implements IGameState {
         public entities: EntityDictionary
         public mapDictionary: MapDictionary
         public monsterSpawners: Entity[]
@@ -27,6 +30,13 @@ export class GameState {
                 this.mapDictionary = new MapDictionary(20)
                 this.monsterSpawners = []
                 //TODO: convert map layers into DTO and send to client with system component
+        }
+
+        getEntities(): Entity[] {
+                return this.entities
+        }
+        getMonsterSpawners(): Entity[] {
+                return this.monsterSpawners
         }
 
         public convertToEntityDTOArray(): EntityDTODictionary {
