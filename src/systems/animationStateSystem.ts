@@ -1,21 +1,32 @@
 import { MovementComponent } from '../entity/Components/movementComponent.js'
 import { SpriteComponent } from '../entity/Components/spriteComponent.js'
 import { StateComponent } from '../entity/Components/stateComponent.js'
-import { GameState } from '../gameState.js'
+import { IGameState } from '../gameState/IGameState.js'
+import { TYPES } from '../inversify.types.js'
+import { IAnimationStateStrategy } from '../strategies/animationState/IAnimationStateStrategy.js'
 import { ISystem } from './Interfaces/ISystem.js'
+import { injectable, inject, multiInject } from 'inversify'
 
+@injectable()
 export class AnimationStateSystem implements ISystem {
-        private state: GameState
+        private state: IGameState
+        private animationStrategies: IAnimationStateStrategy[]
 
-        constructor(state: GameState) {
+        constructor(
+                @inject(TYPES.IGameState) state: IGameState,
+                @multiInject(TYPES.IAnimationStateStrategy) animationStrategies: IAnimationStateStrategy[]
+        ) {
                 this.state = state
+                this.animationStrategies = animationStrategies
+                console.log(this.animationStrategies)
         }
 
         start(): void {
                 throw new Error('Method not implemented.')
         }
         update(): void {
-                const states = this.state.entities
+                const states = this.state
+                        .getEntities()
                         .map((x) => x.getComponent('state') as StateComponent)
                         .filter((x) => x !== undefined)
                 states.forEach((x) => this.calculateAnimationState(x))

@@ -1,14 +1,17 @@
+import { injectable, inject } from 'inversify'
 import { Action, ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
-import { GameState } from '../gameState.js'
+import { IGameState } from '../gameState/IGameState.js'
+import { TYPES } from '../inversify.types.js'
 
 export type InputEvent = {
         input: string
         data: { [key: string]: unknown }
 }
 
+@injectable()
 export class InputSystem {
-        private state: GameState
-        constructor(state: GameState) {
+        private state: IGameState
+        constructor(@inject(TYPES.IGameState) state: IGameState) {
                 this.state = state
         }
 

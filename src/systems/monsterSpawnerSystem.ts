@@ -1,5 +1,4 @@
 import { ISystem } from './Interfaces/ISystem.js'
-import { GameState } from '../gameState.js'
 import { Entity } from '../entity/entity.js'
 import { PositionComponent } from '../entity/Components/positionComponent.js'
 import { SpawnerInfoComponent } from '../entity/Components/spawnerInfoComponent.js'
@@ -11,15 +10,19 @@ import { SpawnInfoComponent } from '../entity/Components/spawnInfoComponent.js'
 import { Vec2 } from '@thi.ng/vectors/vec2'
 import { ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
 import { MovementComponent } from '../entity/Components/movementComponent.js'
+import { TYPES } from '../inversify.types.js'
+import { IGameState } from '../gameState/IGameState.js'
+import { injectable, inject } from 'inversify'
 
+@injectable()
 export class MonsterSpawnerSystem implements ISystem {
-        public state: GameState
+        public state: IGameState
 
-        constructor(state: GameState) {
+        constructor(@inject(TYPES.IGameState) state: IGameState) {
                 this.state = state
                 this.initSpawners()
                 setInterval(() => {
-                        for (const spawner of this.state.monsterSpawners) {
+                        for (const spawner of this.state.getMonsterSpawners()) {
                                 this.spawnEnemy(spawner)
                         }
                 }, 10000)
@@ -39,8 +42,8 @@ export class MonsterSpawnerSystem implements ISystem {
                 spawner2.addComponent('position', new PositionComponent(300, 800))
                 spawner2.addComponent('spawnerInfo', new SpawnerInfoComponent(200, 200, 6))
                 spawner2.addTag('serverOnly', true)
-                this.state.monsterSpawners.push(spawner1)
-                this.state.monsterSpawners.push(spawner2)
+                this.state.getMonsterSpawners().push(spawner1)
+                this.state.getMonsterSpawners().push(spawner2)
         }
 
         spawnEnemy(spawnerEntity: Entity) {
@@ -62,6 +65,6 @@ export class MonsterSpawnerSystem implements ISystem {
                 enemy.addComponent('actionQueue', new ActionQueueComponent())
                 enemy.addComponent('movement', new MovementComponent(2))
                 spawnerInfo.mobs.push(enemy)
-                this.state.entities.push(enemy)
+                this.state.getEntities().push(enemy)
         }
 }

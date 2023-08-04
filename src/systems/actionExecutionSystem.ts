@@ -2,16 +2,19 @@ import { ActionQueueComponent } from '../entity/Components/actionQueueComponent.
 import { MovementComponent } from '../entity/Components/movementComponent.js'
 import { PositionComponent } from '../entity/Components/positionComponent.js'
 import { StateComponent } from '../entity/Components/stateComponent.js'
-import { GameState } from '../gameState.js'
 import { ISystem } from './Interfaces/ISystem.js'
 import { Vec2 } from '@thi.ng/vectors'
 import * as v from '@thi.ng/vectors'
+import { TYPES } from '../inversify.types.js'
+import { IGameState } from '../gameState/IGameState.js'
+import { injectable, inject } from 'inversify'
 
+@injectable()
 export class ActionExecutionSystem implements ISystem {
-        private state: GameState
+        private state: IGameState
         private inputAxis: Vec2
 
-        constructor(state: GameState) {
+        constructor(@inject(TYPES.IGameState) state: IGameState) {
                 this.state = state
                 this.inputAxis = new Vec2([0, 0])
         }
@@ -21,7 +24,8 @@ export class ActionExecutionSystem implements ISystem {
         }
 
         update(): void {
-                const actionQueues = this.state.entities
+                const actionQueues = this.state
+                        .getEntities()
                         .map((x) => x.getComponent('actionQueue') as ActionQueueComponent)
                         .filter((x) => x !== undefined)
                 actionQueues.forEach((x) => this.executeActions(x))
@@ -39,7 +43,7 @@ export class ActionExecutionSystem implements ISystem {
                         for (const command of actionQueue.blockingActions) {
                                 if (command.name == 'attack') {
                                         const pos = new Vec2([command.data!.xPos as number, command.data!.yPos as number])
-                                        console.log(`he attac this position: x:${pos.x} y:${pos.y}`)
+                                        //console.log(`he attac this position: x:${pos.x} y:${pos.y}`)
                                         stateComponent.state = 'attack'
                                 }
                                 if (command.duration >= 1) {

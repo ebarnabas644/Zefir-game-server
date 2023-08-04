@@ -1,13 +1,16 @@
 import { Vec2 } from '@thi.ng/vectors'
 import { SpawnInfoComponent } from '../entity/Components/spawnInfoComponent.js'
 import { StrategyComponent } from '../entity/Components/strategyComponent.js'
-import { GameState } from '../gameState.js'
 import { ISystem } from './Interfaces/ISystem.js'
 import { Action, ActionQueueComponent } from '../entity/Components/actionQueueComponent.js'
+import { TYPES } from '../inversify.types.js'
+import { IGameState } from '../gameState/IGameState.js'
+import { injectable, inject } from 'inversify'
 
+@injectable()
 export class StrategyPlayerSystem implements ISystem {
-        state: GameState
-        constructor(state: GameState) {
+        state: IGameState
+        constructor(@inject(TYPES.IGameState) state: IGameState) {
                 this.state = state
         }
 
@@ -15,7 +18,8 @@ export class StrategyPlayerSystem implements ISystem {
                 throw new Error('Method not implemented.')
         }
         update(): void {
-                const strategyComponents = this.state.entities
+                const strategyComponents = this.state
+                        .getEntities()
                         .map((x) => x.getComponent('strategy') as StrategyComponent)
                         .filter((x) => x !== undefined)
                 strategyComponents.forEach((x) => this.playStrategy(x))
