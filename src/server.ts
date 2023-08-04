@@ -1,33 +1,37 @@
+import 'reflect-metadata'
+import { container } from './inversify.config.js'
 import express, { Request, Response } from 'express'
 import { Express } from 'express'
 import http from 'http'
 import { Server, Socket } from 'socket.io'
 import cors from 'cors'
-import { GameState } from './gameState.js'
 import { Entity } from './entity/entity.js'
 import { HealthComponent } from './entity/Components/healthComponent.js'
 import { PositionComponent } from './entity/Components/positionComponent.js'
-import { RequirementCallback, SpriteComponent } from './entity/Components/spriteComponent.js'
+import { SpriteComponent } from './entity/Components/spriteComponent.js'
 import { MovementComponent } from './entity/Components/movementComponent.js'
 import { ActionQueueComponent } from './entity/Components/actionQueueComponent.js'
 import { InputSystem, type InputEvent } from './systems/inputSystem.js'
 import { ActionExecutionSystem } from './systems/actionExecutionSystem.js'
 import { StateComponent } from './entity/Components/stateComponent.js'
-import { AnimationStateSystem } from './systems/animationStateSystem.js'
 import { MovementSystem } from './systems/movementSystem.js'
 import { MapInitSystem } from './systems/mapInitSystem.js'
 import { HitboxComponent } from './entity/Components/hitboxComponent.js'
 import { MonsterSpawnerSystem } from './systems/monsterSpawnerSystem.js'
 import { StrategyPlayerSystem } from './systems/strategyPlayerSystem.js'
 import { StrategyStateUpdateSystem } from './systems/strategyStateUpdateSystem.js'
+import { TYPES } from './inversify.types.js'
+import { ISystem } from './systems/Interfaces/ISystem.js'
+import { IGameState } from './gameState/IGameState.js'
 
 const startDate = Date.now()
-export const gameState = new GameState()
+export const gameState = container.get<IGameState>(TYPES.IGameState)
+console.log(gameState)
 const mapInitSystem = new MapInitSystem(gameState, './dist/assets/maps')
 mapInitSystem.start()
 const inputSystem = new InputSystem(gameState)
 const actionExecutionSystem = new ActionExecutionSystem(gameState)
-const animationStateSystem = new AnimationStateSystem(gameState)
+const animationStateSystem = container.get<ISystem>(TYPES.ISystem)
 const movementSystem = new MovementSystem(gameState)
 const monsterSpawnerSystem = new MonsterSpawnerSystem(gameState)
 const strategyPlayerSystem = new StrategyPlayerSystem(gameState)
@@ -76,7 +80,7 @@ io.on('connection', (socket: Socket) => {
                 player.addTag('controlledby', socket.id)
                 player.addTag('targetableByMob', true)
                 player.initComponents()
-                gameState.entities.push(player)
+                gameState.getEntities().push(player)
                 connectedSockets.push(socket.id)
                 socket.emit('playerCreated', player.name)
                 socket.broadcast.emit('chat-playerJoined', player.name)
@@ -127,7 +131,7 @@ httpServer.listen(3000, () => {
 })
 
 function runEntityLogic() {
-        for (const entity of gameState.entities) {
+        for (const entity of gameState.getEntities()) {
                 entity.updateComponents()
         }
 }
