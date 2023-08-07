@@ -14,7 +14,7 @@ variables:
   dockerRegistryServiceConnection: '82a849ee-aeda-41e1-b8f7-da873d419cdf'
   imageRepository: 'zefirgameserver'
   containerRegistry: 'iedre.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: '**/dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'iedre0403-auth'
 
