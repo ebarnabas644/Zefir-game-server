@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: zefirgameserver 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zefirgameserver
+  template:
+    metadata:
+      labels:
+        app: zefirgameserver 
+    spec:
+      containers:
+        - name: zefirgameserver 
+          image: iedre.azurecr.io/zefirgameserver
+          ports:
+          - containerPort: 3000
