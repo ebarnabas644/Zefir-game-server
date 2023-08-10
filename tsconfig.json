@@ -1,11 +1,17 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "outDir": "dist",
-      "moduleResolution": "NodeNext",
-      "strict": true,
-      "esModuleInterop": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
-  }
+        "compilerOptions": {
+                "target": "ES6",
+                "lib": ["es6"],
+                "types": ["reflect-metadata"],
+                "outDir": "dist",
+                "module": "NodeNext",
+                "moduleResolution": "NodeNext",
+                "strict": true,
+                "esModuleInterop": true,
+                "rootDir": "./src",
+                "experimentalDecorators": true,
+                "emitDecoratorMetadata": true
+        },
+        "include": ["src/**/*"],
+        "exclude": ["node_modules"]
+}
