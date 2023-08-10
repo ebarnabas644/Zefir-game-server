@@ -1,0 +1,69 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+  imageRepo: zefirgameserver
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'zefirgameserver'
+        repository: '$(imageRepo)'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/dockerfile'
+        tags: |
+          $(tag)
+          latest
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/s/manifests'
+        artifact: 'manifests'
+        publishLocation: 'pipeline'
+        
+- stage: Deploy
+  displayName: Deploy to Dev
+  dependsOn: Build
+  variables:
+    azureContainerRegistrySecret: zefirregistryauth
+  jobs:
+    - job: Deploy
+      displayName: Deploy to AKS
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'manifests'
+            targetPath: '$(Pipeline.Workspace)/manifests'
+        - task: KubernetesManifest@1
+          inputs:
+            action: 'createSecret'
+            connectionType: 'kubernetesServiceConnection'
+            kubernetesServiceConnection: 'zefir-cluster-zefir-server'
+            namespace: 'zefir-server'
+            secretType: 'dockerRegistry'
+            secretName: '$(azureContainerRegistrySecret)'
+            dockerRegistryEndpoint: 'zefirgameserver'
+        - task: KubernetesManifest@1
+          inputs:
+            action: 'deploy'
+            connectionType: 'kubernetesServiceConnection'
+            kubernetesServiceConnection: 'zefir-cluster-zefir-server'
+            namespace: 'zefir-server'
+            manifests: |
+              $(Pipeline.Workspace)/manifests/deployment.yml
+              $(Pipeline.Workspace)/manifests/service.yml
