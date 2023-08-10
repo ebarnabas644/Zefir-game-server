@@ -5,7 +5,7 @@
         "main": "index.js",
         "type": "module",
         "scripts": {
-                "build": "tsc",
+                "build": "tsc && tscp",
                 "test": "echo \"Error: no test specified\" && exit 1",
                 "start": "node dist/server.js",
                 "dev": "tsc && tscp && node dist/server.js"
