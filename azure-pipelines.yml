@@ -39,33 +39,33 @@ stages:
   variables:
     azureContainerRegistrySecret: zefirregistryauth
   jobs:
-    - job: Deploy
+    - deployment: Deploy
       displayName: Deploy to AKS
+      environment: 'zefir-server-dev.zefir-server'
       pool:
         vmImage: ubuntu-latest
-      steps:
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            buildType: 'current'
-            artifactName: 'manifests'
-            targetPath: '$(Pipeline.Workspace)/manifests'
-        - task: KubernetesManifest@1
-          inputs:
-            action: 'createSecret'
-            connectionType: 'kubernetesServiceConnection'
-            kubernetesServiceConnection: 'zefir-cluster-zefir-server'
-            namespace: 'zefir-server'
-            secretType: 'dockerRegistry'
-            secretName: '$(azureContainerRegistrySecret)'
-            dockerRegistryEndpoint: 'zefirgameserver'
-        - task: KubernetesManifest@1
-          inputs:
-            action: 'deploy'
-            connectionType: 'kubernetesServiceConnection'
-            kubernetesServiceConnection: 'zefir-cluster-zefir-server'
-            namespace: 'zefir-server'
-            manifests: |
-              $(Pipeline.Workspace)/manifests/deployment.yml
-              $(Pipeline.Workspace)/manifests/service.yml
-            imagePullSecrets: |
-              $(azureContainerRegistrySecret)
+      strategy:
+       runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'manifests'
+                targetPath: '$(Pipeline.Workspace)/manifests'
+            - task: KubernetesManifest@1
+              inputs:
+                action: 'createSecret'
+                namespace: 'zefir-server'
+                secretType: 'dockerRegistry'
+                secretName: '$(azureContainerRegistrySecret)'
+                dockerRegistryEndpoint: 'zefirgameserver'
+            - task: KubernetesManifest@1
+              inputs:
+                action: 'deploy'
+                namespace: 'zefir-server'
+                manifests: |
+                  $(Pipeline.Workspace)/manifests/deployment.yml
+                  $(Pipeline.Workspace)/manifests/service.yml
+                imagePullSecrets: |
+                  $(azureContainerRegistrySecret)
