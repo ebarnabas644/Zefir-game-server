@@ -38,6 +38,7 @@ stages:
   variables:
     azureContainerRegistrySecret: zefirregistryauth
     azureContainerUrl: 'zefirgameserver.azurecr.io'
+    replicaNumber: 1
   jobs:
     - deployment: Deploy
       displayName: Deploy to AKS
@@ -60,6 +61,23 @@ stages:
                 secretType: 'dockerRegistry'
                 secretName: '$(azureContainerRegistrySecret)'
                 dockerRegistryEndpoint: 'zefirgameserver'
+            - task: replacetokens@5
+              displayName: Replace tokens
+              inputs:
+                rootDirectory: '$(Pipeline.Workspace)/manifests/'
+                targetFiles: 'deployment.yml'
+                encoding: 'auto'
+                tokenPattern: 'custom'
+                tokenPrefix: '#'
+                tokenSuffix: '#'
+                writeBOM: true
+                actionOnMissing: 'warn'
+                keepToken: false
+                actionOnNoFiles: 'continue'
+                enableTransforms: false
+                enableRecursion: false
+                useLegacyPattern: false
+                enableTelemetry: true
             - task: KubernetesManifest@1
               inputs:
                 action: 'deploy'
