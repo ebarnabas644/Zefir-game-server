@@ -5,6 +5,7 @@ metadata:
 spec:
         selector:
                 app: zefir-server
+        type: LoadBalancer
         ports:
                 - protocol: TCP
                   port: 3000
