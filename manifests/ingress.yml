@@ -3,9 +3,13 @@ kind: Ingress
 metadata:
         name: zefir-server-ingress
         annotations:
-                kubernetes.io/ingress.class: addon-http-application-routing
                 #cert-manager.io/issuer: "letsencrypt-staging"
 spec:
+        ingressClassName: nginx
+        tls:
+                - hosts:
+                          - server.zefir.iedre.net
+                  secretName: quickstart-example-tls
         rules:
                 - host: server.zefir.iedre.net
                   http:
