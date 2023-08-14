@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
         name: zefir-server-ingress
         annotations:
-                {}
+                kubernetes.io/ingress.class: addon-http-application-routing
                 #cert-manager.io/issuer: "letsencrypt-staging"
 spec:
         rules:
