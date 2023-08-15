@@ -67,7 +67,7 @@ stages:
                 installKubectl: false
             - task: HelmDeploy@0
               inputs:
-                connectionType: 'None'
+                connectionType: 'Kubernetes Service Connection'
                 namespace: 'zefir-server'
                 command: 'upgrade'
                 chartType: 'Name'
@@ -76,7 +76,7 @@ stages:
                 overrideValues: 'controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz'
             - task: HelmDeploy@0
               inputs:
-                connectionType: 'None'
+                connectionType: 'Kubernetes Service Connection'
                 namespace: 'zefir-server'
                 command: 'upgrade'
                 chartType: 'Name'
