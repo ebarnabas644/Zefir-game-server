@@ -83,8 +83,7 @@ stages:
                 action: 'deploy'
                 namespace: 'zefir-server'
                 manifests: |
-                  $(Pipeline.Workspace)/manifests/cert-manager-dev.yml
-                  $(Pipeline.Workspace)/manifests/cert-manager-prod.yml
+                  $(Pipeline.Workspace)/manifests/cert-manager.yml
                   $(Pipeline.Workspace)/manifests/deployment.yml
                   $(Pipeline.Workspace)/manifests/service.yml
                   $(Pipeline.Workspace)/manifests/ingress.yml
