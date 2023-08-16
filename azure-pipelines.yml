@@ -18,7 +18,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build server image
       inputs:
         containerRegistry: 'zefirgameserver'
         repository: '$(imageRepo)'
@@ -27,6 +27,7 @@ stages:
         tags: |
           $(tag)
     - task: PublishPipelineArtifact@1
+      displayName: Publish manifests
       inputs:
         targetPath: '$(Pipeline.Workspace)/s/manifests'
         artifact: 'manifests'
@@ -50,11 +51,13 @@ stages:
         deploy:
           steps:
             - task: DownloadPipelineArtifact@2
+              displayName: Download manifests
               inputs:
                 buildType: 'current'
                 artifactName: 'manifests'
                 targetPath: '$(Pipeline.Workspace)/manifests'
             - task: KubernetesManifest@1
+              displayName: Create docker registry secret
               inputs:
                 action: 'createSecret'
                 namespace: 'zefir-server'
@@ -62,6 +65,7 @@ stages:
                 secretName: '$(azureContainerRegistrySecret)'
                 dockerRegistryEndpoint: 'zefirgameserver'
             - task: HelmInstaller@0
+              displayName: Install Helm
               inputs:
                 helmVersion: '2.14.1'
                 installKubectl: false
@@ -71,6 +75,7 @@ stages:
                 helm repo update
               displayName: 'Add Helm Repositories'
             - task: HelmDeploy@0
+              displayName: Install/upgrade ingress-nginx controller
               inputs:
                 connectionType: 'Kubernetes Service Connection'
                 namespace: 'zefir-server'
@@ -80,6 +85,7 @@ stages:
                 releaseName: 'ingress-nginx'
                 overrideValues: 'controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz'
             - task: HelmDeploy@0
+              displayName: Install/upgrade cert-manager
               inputs:
                 connectionType: 'Kubernetes Service Connection'
                 namespace: 'zefir-server'
@@ -106,6 +112,7 @@ stages:
                 useLegacyPattern: false
                 enableTelemetry: true
             - task: KubernetesManifest@1
+              displayName: Deploy manifests
               inputs:
                 action: 'deploy'
                 namespace: 'zefir-server'
